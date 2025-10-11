@@ -1,29 +1,21 @@
-# Use an official Node runtime as a parent image
-FROM node:14 AS build
+# Smallest official Node.js image available
+FROM node:18-alpine
 
-# Set the working directory in the container
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json files to the container
+# Copy package manifests. 
+# This layer is cached and only re-runs if package.json changes.
 COPY package*.json ./
 
-# Install application dependencies
-RUN npm install
+# Install ONLY production dependencies to keep the image small
+RUN npm install --omit=dev
 
-# Copy the rest of the application code to the container
+# Copy the rest of the application source code
 COPY . .
 
-#Add multi-stage build
-FROM alpine:3.16.7
-
-WORKDIR /app
-
-RUN apk update && apk add --update nodejs
-
-COPY --from=build /usr/src/app /app
-
-# Expose the port the app runs on
+# Listens on port 5000
 EXPOSE 5000
 
-# Define the command to run your app
-CMD ["node", "server.js"]
+# The command to run when the container starts
+CMD [ "node", "server.js" ]
