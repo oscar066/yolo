@@ -1,21 +1,32 @@
-# Smallest official Node.js image available
-FROM node:18-alpine
+# Use a modern, secure, and alpine-based LTS Node.js version for the build stage
+FROM node:18-alpine AS build
 
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy package manifests. 
-# This layer is cached and only re-runs if package.json changes.
+# Copy the package.json and package-lock.json files to the container
 COPY package*.json ./
 
-# Install ONLY production dependencies to keep the image small
-RUN npm install --omit=dev
+# Install application dependencies
+RUN npm install
 
-# Copy the rest of the application source code
+# Copy the rest of the application code to the container
 COPY . .
 
-# Listens on port 5000
+#Add multi-stage build
+
+# Use a recent, stable version of Alpine Linux
+FROM alpine:3.19
+
+WORKDIR /app
+
+RUN apk update && apk add --update nodejs npm
+
+# Copy the built application from the 'build' stage
+COPY --from=build /usr/src/app /app
+
+# Expose the port the app runs on
 EXPOSE 5000
 
-# The command to run when the container starts
-CMD [ "node", "server.js" ]
+# Define the command to run your app
+CMD ["node", "server.js"]
