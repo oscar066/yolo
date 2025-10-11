@@ -20,7 +20,7 @@ services:
   oscar-yolo-backend:
     build:
       context: ./backend
-    image: oscar066/oscar-yolo-backend:v1.1.0
+    image: oscar066/oscar-yolo-backend:v1.1.1
     container_name: oscar-yolo-backend
     restart: always
     ports:
