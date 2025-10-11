@@ -34,6 +34,9 @@ services:
     restart: always
     ports:
       - "5000:5000"
+    # Add the mongo environment variable
+    environment:
+      - MONGODB_URI=mongodb://app-ip-mongo:27017/yolomy
     depends_on: 
       - app-ip-mongo
     networks:
