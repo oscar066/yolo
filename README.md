@@ -95,14 +95,16 @@ Once the containers are running, you can access the different parts of the appli
 
 ## Project Screenshots 
 
-**Frontend Running Locally**
+**Frontend Running**
 
 ![Frontend](screenshots/screen1.png)
 
-**Frontend Running Locally before adding a product**
+**Frontend Running before adding a product**
+
 ![Frontend](screenshots/screen-before-adding-product.png)
 
-**Frontend Running Locally after adding a product**
+**Frontend Running after adding a product**
+
 ![Frontend](screenshots/screen-after-adding-product.png)
 
 ![Frontend](screenshots/footer.png)
