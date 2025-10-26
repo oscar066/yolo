@@ -1,29 +1,36 @@
-# Yolo E-Commerce Application (Containerized)
+# Yolo E-Commerce Application (Automated & Containerized Deployment)
 
-This repository contains the source code for the Yolo E-Commerce application, a full-stack web platform. The primary goal of this project was to containerize the application's microservices (frontend, backend, and database) using Docker and Docker Compose for a seamless, reproducible, and production-ready deployment.
+This repository contains the source code for the Yolo E-Commerce application. This project automates the deployment of its microservices (frontend, backend, and database) using a combination of technologies for a seamless and reproducible setup.
 
-The entire containerization process, including architectural decisions, debugging, and best practices, is detailed in the `explanation.md` file.
+There are two methods to run this application:
+1.  **Automated Deployment (Recommended):** A one-command setup using Vagrant and Ansible.
+2.  **Manual Deployment:** For users who want to interact directly with Docker and Docker Compose.
+
+The entire process, including the automation architecture, containerization decisions, and debugging, is detailed in the `IP2_explanation.md` for using Docker and Docker compose and `IP3_explanation.md` for using Vagrant and Ansible files.
 
 ## Technology Stack
 
 *   **Frontend:** React.js
 *   **Backend:** Node.js, Express.js
 *   **Database:** MongoDB
+*   **Web Server:** Nginx
 *   **Containerization:** Docker, Docker Compose
-*   **Web Server:** Nginx (for serving the production frontend)
+*   **Virtual Environment:** Vagrant
+*   **Configuration Management:** Ansible
 
 ---
 
-## Prerequisites
+## Method 1: Automated Deployment with Vagrant & Ansible (Recommended)
 
-Before you begin, ensure you have the following installed on your system:
+This method uses Vagrant to provision a virtual machine and Ansible to automatically install all dependencies, clone the repository, and deploy the containerized application.
+
+### Prerequisites
 
 *   **Git:** To clone the repository.
-*   **Docker Desktop:** This includes both the Docker Engine and Docker Compose, which are required to build and run the application.
+*   **Vagrant:** To manage the virtual machine.
+*   **VirtualBox:** As the virtualization provider for Vagrant.
 
----
-
-## Getting Started
+### Instructions
 
 1.  **Clone the repository** to your local machine:
     ```bash
@@ -35,65 +42,95 @@ Before you begin, ensure you have the following installed on your system:
     cd yolo
     ```
 
+3.  **Launch the Environment:**
+    Run the single `vagrant up` command from the root of the project:
+    ```bash
+    vagrant up
+    ```
+    This command will:
+    *   Create and configure an Ubuntu 22.04 virtual machine.
+    *   Run the Ansible playbook to install Docker, Docker Compose, and all other dependencies.
+    *   Clone the application source code into the VM.
+    *   Build and launch the application containers in the correct order.
+
+    **Note:** The first run will take several minutes as it needs to download the virtual machine image and build the Docker containers.
+
+### Accessing the Application
+
+Once `vagrant up` completes successfully, the application will be running inside the VM and accessible from your local machine's browser.
+
+*   **Frontend Website:**
+    *   Navigate to **`http://localhost:8080`** in your web browser.
+    *   *(This port is forwarded from port 80 inside the VM, where the Nginx container is running).*
+
+### Managing the Environment
+
+*   **To stop the virtual machine:**
+    ```bash
+    vagrant halt
+    ```
+*   **To destroy the virtual machine completely:**
+    ```bash
+    vagrant destroy -f
+    ```
+*   **To re-run only the Ansible provisioning:**
+    ```bash
+    vagrant provision
+    ```
+
 ---
 
-## Running the Application
+## Method 2: Manual Deployment with Docker Compose
 
-The entire application stack (frontend, backend, database) is orchestrated with a single Docker Compose command.
+This method is for users who prefer to run the application directly on their host machine using Docker, without the Vagrant virtual machine.
 
-1.  **Build and Run the Containers:**
+### Prerequisites
+
+*   **Git:** To clone the repository.
+*   **Docker Desktop:** This includes both the Docker Engine and Docker Compose.
+
+### Instructions
+
+1.  **Clone and navigate into the repository** (if you haven't already).
+
+2.  **Build and Run the Containers:**
     From the root directory of the project, run the following command:
     ```bash
     docker-compose up --build
     ```
-    *   `--build`: This flag tells Docker Compose to build the images from the `Dockerfile`s before starting the containers. This is essential for applying your latest changes.
+    *   `--build`: This flag tells Docker Compose to build the images from the `Dockerfile`s before starting the containers.
 
-2.  **Verification:**
-    You will see logs from all three services (`oscar-yolo-client`, `oscar-yolo-backend`, and `app-mongo`). The application is ready when the backend log shows a successful connection to the database.
-
-    **Running in the Background (Detached Mode):**
-    For a cleaner terminal, you can run the application in detached mode:
+3.  **Running in the Background (Detached Mode):**
     ```bash
     docker-compose up -d --build
     ```
-    The containers will run in the background. You can view logs anytime with `docker-compose logs -f`.
 
----
-
-## Accessing the Services
-
-Once the containers are running, you can access the different parts of the application:
+### Accessing the Services (Manual Mode)
 
 *   **Frontend Website:**
-    *   Navigate to **`http://localhost`** in your web browser.
-    *   *(This corresponds to port 80, which is the default for Nginx).*
+    *   Navigate to **`http://localhost`** in your web browser. *(Note: This uses port 80, unlike the Vagrant method).*
 
 *   **Backend API:**
-    *   The API is running and accessible at `http://localhost:5000`.
+    *   The API is running at `http://localhost:5000`.
 
 *   **Database:**
-    *   The MongoDB database is running and can be connected to at `mongodb://localhost:27017` using a client like MongoDB Compass.
+    *   Connect to the database at `mongodb://localhost:27017` using a client like MongoDB Compass.
+
+### Stopping the Application (Manual Mode)
+
+*   **The Recommended Method (stops and removes containers):**
+    ```bash
+    docker-compose down
+    ```
+
+*   **To Stop and Remove the Database Volume (Warning: Deletes all data):**
+    ```bash
+    docker-compose down -v
+    ```
 
 ---
 
-## Stopping the Application
-
-1.  **If running in the foreground:**
-    *   Press `Ctrl + C` in the terminal where the containers are running.
-
-2.  **The Recommended Method (stops and removes containers):**
-    *   Run the following command from the project root:
-        ```bash
-        docker-compose down
-        ```
-
-3.  **To Stop and Remove the Database Volume:**
-    *   If you want to completely reset the database and start fresh, use the `-v` flag. **Warning: This will delete all data in your database.**
-        ```bash
-        docker-compose down -v
-        ```
-
-## Project Screenshots 
+## Project Screenshots
 
 **Frontend Running**
 
@@ -109,5 +146,5 @@ Once the containers are running, you can access the different parts of the appli
 
 ![Frontend](screenshots/footer.png)
 
-
-
+**Frontend Running after adding a product on the server running after running Vagrant Up command**
+![Frontend](screenshots/after-running-vagrant-up.png)
