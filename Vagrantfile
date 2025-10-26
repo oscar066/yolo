@@ -36,17 +36,7 @@ Vagrant.configure("2") do |config|
   # This block tells Vagrant to automatically configure the VM using Ansible
   # after it has been created and booted.
   config.vm.provision "ansible" do |ansible|
-    # Specifies the path to our main Ansible playbook file. This path is
-    # relative to the project's root directory (where this Vagrantfile is).
     ansible.playbook = "ansible-playbook/playbook.yml"
-
-    # Automatically install Ansible on the guest VM if it's not already present.
-    # This saves us from having to SSH into the box and install it manually.
-    ansible.install = true
-
-    # Ensure the latest version of Ansible is installed.
-    ansible.version = "latest"
-    ansible.galaxy_collection_install_command = "ansible-galaxy collection install community.docker"
   end
 
 end
