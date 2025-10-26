@@ -1,3 +1,28 @@
-#SPDX-License-Identifier: MIT-0
+# This file contains the tasks for the 'clone-repository' role.
+# Its only job is to clone your application's source code onto the VM.
+
 ---
-# tasks file for clone-repository
+# Task 1: Clone the application repository from GitHub.
+- name: Clone the application repository
+  ansible.builtin.git:
+    repo: 'https://github.com/oscar066/yolo.git'
+    
+    # The destination directory on the VM where the code will be placed.
+    dest: /home/vagrant/app
+    
+    # Specify the branch to use.
+    version: master
+    
+    # Ensure it pulls the latest changes if the directory already exists.
+    update: yes
+
+
+
+# Task 2: Ensure the 'vagrant' user owns the cloned directory.
+- name: Set correct ownership for the app directory
+  ansible.builtin.file:
+    path: /home/vagrant/app
+    state: directory
+    owner: vagrant
+    group: vagrant
+    recurse: yes
