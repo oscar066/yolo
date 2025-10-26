@@ -1,3 +1,19 @@
-#SPDX-License-Identifier: MIT-0
+# This file contains the tasks for the 'setup-mongodb' role.
+# Its purpose is to start ONLY the database container for the application.
+
 ---
-# tasks file for setup-mongodb
+- name: Start the MongoDB container using docker-compose
+  community.docker.docker_compose:
+    # 'project_src' is the path to the directory containing the docker-compose.yml file.
+    project_src: /home/vagrant/app
+    
+    # In this role, we only want to start the database.
+    services:
+      - app-ip-mongo
+                
+    # 'state: present' ensures that the specified services are created and running.
+    state: present
+    
+    # We specify 'build: no' because the MongoDB image is pre-built and downloaded
+    # from Docker Hub, not built from a Dockerfile in our repo.
+    build: no
