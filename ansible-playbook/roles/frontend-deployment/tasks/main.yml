@@ -1,3 +1,20 @@
-#SPDX-License-Identifier: MIT-0
+# This file contains the tasks for the 'frontend-deployment' role.
+# Its purpose is to build and start the frontend/client container.
+
 ---
-# tasks file for frontend-deployment
+- name: Start the frontend container using docker-compose
+  community.docker.docker_compose:
+    # Point to the directory containing the docker-compose.yml file.
+    project_src: /home/vagrant/app
+    
+    # Specify the list of services to ensure are running.
+    services:
+      - oscar-yolo-client
+              
+
+    # 'state: present' ensures the service is created and running.
+    state: present
+    
+    # 'build: yes' is essential. It tells docker-compose to build the image
+    # from your frontend's Dockerfile. This will execute the multi-stage build:
+    build: yes
