@@ -1,8 +1,9 @@
 # This is the main Ansible playbook that Vagrant will execute.
 # It defines the entire provisioning and deployment process from start to finish.
+
 ---
 - hosts: all  # Specifies that this playbook should run on all machines Vagrant manages 
-  become: yes   # Instructs Ansible to use 'sudo' for all tasks, granting the necessary administrative privileges for software installation.
+  become: yes   # Instructs Ansible to use 'sudo' for all tasks.
 
   # 'pre_tasks' are tasks that run BEFORE any roles are executed.
   pre_tasks:
@@ -15,7 +16,8 @@
 
   # The 'roles' section is the core of the playbook.
   # Ansible executes these roles sequentially in the exact order they are listed.
-  # This order is CRITICAL for the application to be deployed correctly.
+  # This order is Important for the application to be deployed correctly.
+
   roles:
     # Role 1: Installs Docker and Docker Compose, the foundation for our containerized application.
     - role: docker-setup
