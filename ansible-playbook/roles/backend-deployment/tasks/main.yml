@@ -1,3 +1,19 @@
-#SPDX-License-Identifier: MIT-0
+# This file contains the tasks for the 'backend-deployment' role.
+# Its purpose is to build and start the backend/API container.
+
 ---
-# tasks file for backend-deployment
+- name: Start the backend container using docker-compose
+  community.docker.docker_compose:
+    # Point to the directory containing the docker-compose.yml file.
+    project_src: /home/vagrant/app
+    
+    # Specify the list of services to ensure are running.
+    services:
+      - oscar-yolo-backend
+                
+    # 'state: present' ensures the service is created and running.
+    state: present
+    
+    # 'build: yes' is crucial here. It tells docker-compose to build the image
+    # from your backend's Dockerfile if a pre-built image isn't found.
+    build: yes
