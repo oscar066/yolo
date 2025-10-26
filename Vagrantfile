@@ -46,6 +46,7 @@ Vagrant.configure("2") do |config|
 
     # Ensure the latest version of Ansible is installed.
     ansible.version = "latest"
+    ansible.galaxy_collection_install_command = "ansible-galaxy collection install community.docker"
   end
 
 end
