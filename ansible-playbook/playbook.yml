@@ -1,0 +1,43 @@
+# This is the main Ansible playbook that Vagrant will execute.
+# It defines the entire provisioning and deployment process from start to finish.
+---
+- hosts: all  # Specifies that this playbook should run on all machines Vagrant manages 
+  become: yes   # Instructs Ansible to use 'sudo' for all tasks, granting the necessary administrative privileges for software installation.
+
+  # 'pre_tasks' are tasks that run BEFORE any roles are executed.
+  pre_tasks:
+    - name: Update apt package cache # A descriptive name for the task 
+      apt:
+        update_cache: yes      
+        cache_valid_time: 3600     
+      tags:
+        - always
+
+  # The 'roles' section is the core of the playbook.
+  # Ansible executes these roles sequentially in the exact order they are listed.
+  # This order is CRITICAL for the application to be deployed correctly.
+  roles:
+    # Role 1: Installs Docker and Docker Compose, the foundation for our containerized application.
+    - role: docker-setup
+      tags:
+        - docker
+
+    # Role 2: Clones the application's source code from the GitHub repository onto the VM.
+    - role: clone-repository
+      tags:
+        - app
+
+    # Role 3: Starts the MongoDB database container. This must be running before the backend.
+    - role: setup-mongodb
+      tags:
+        - db
+
+    # Role 4: Starts the backend/API container, which depends on the database.
+    - role: backend-deployment
+      tags:
+        - backend
+
+    # Role 5: Starts the frontend container, which communicates with the backend.
+    - role: frontend-deployment
+      tags:
+        - frontend
