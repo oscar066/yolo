@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oscar-yolo-backend
+  template:
+    metadata:
+      labels:
+        app: oscar-yolo-backend
+    spec:
+      containers:
+      - name: backend
+        image: oscar066/oscar-yolo-backend:v1.1.1 # Image from Docker Hub
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://mongo-service:27017/yolomy"

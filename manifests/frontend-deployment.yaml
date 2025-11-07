@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oscar-yolo-client
+  template:
+    metadata:
+      labels:
+        app: oscar-yolo-client
+    spec:
+      containers:
+      - name: client
+        image: oscar066/oscar-yolo-client:v1.1.0 # Image from Docker Hub
+        ports:
+        - containerPort: 80
