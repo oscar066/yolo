@@ -8,14 +8,14 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: mongo # This selector remains, as it's used by the service
+      app: mongo
   serviceName: "mongo-service"
   replicas: 1
   template:
     metadata:
       labels:
-        app: mongo # This label is required by the selector
-        component: database # Add a more descriptive label
+        app: mongo # required by the selector
+        component: database 
     spec:
       containers:
       - name: mongo
