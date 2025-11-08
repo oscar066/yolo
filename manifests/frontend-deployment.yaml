@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-deployment
+  labels:
+    app: yolo-ecommerce
+    component: frontend
 spec:
   replicas: 1
   selector:
@@ -11,9 +14,10 @@ spec:
     metadata:
       labels:
         app: oscar-yolo-client
+        component: frontend
     spec:
       containers:
       - name: client
-        image: oscar066/oscar-yolo-client:v1.2.0 # Image from Docker Hub : Updated version without hardcoded backend URL
+        image: oscar066/oscar-yolo-client:v1.2.0
         ports:
         - containerPort: 80
