@@ -2,27 +2,31 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongo-statefulset
+  labels:
+    app: yolo-ecommerce
+    component: database
 spec:
   selector:
     matchLabels:
-      app: mongo
-  serviceName: "mongo-service" # This must match the service name
-  replicas: 1 # We'll start with one instance of our database
+      app: mongo # This selector remains, as it's used by the service
+  serviceName: "mongo-service"
+  replicas: 1
   template:
     metadata:
       labels:
-        app: mongo
+        app: mongo # This label is required by the selector
+        component: database # Add a more descriptive label
     spec:
       containers:
       - name: mongo
-        image: mongo:noble # Using the same image from docker-compose
+        image: mongo:noble
         ports:
         - containerPort: 27017
           name: mongo
         volumeMounts:
         - name: mongo-persistent-storage
-          mountPath: /data/db # MongoDB's default data directory
-  volumeClaimTemplates: # The StatefulSet will automatically create a PVC for each pod
+          mountPath: /data/db
+  volumeClaimTemplates:
   - metadata:
       name: mongo-persistent-storage
     spec:
