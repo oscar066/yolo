@@ -2,13 +2,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: yolo-ingress
+  labels:
+    app: yolo-ecommerce
 spec:
-  ingressClassName: nginx
+  # The ingressClassName line has been removed to allow GKE's default controller to take over.
   rules:
   - http:
       paths:
-      # If the path starts with /api, proxy it to the backend service.
-      # The path is NOT rewritten. It will be forwarded as-is.
       - path: /api
         pathType: Prefix
         backend:
@@ -16,7 +16,6 @@ spec:
             name: backend-service
             port:
               number: 5000
-      # If the path is anything else, send it to the frontend service.
       - path: /
         pathType: Prefix
         backend:
