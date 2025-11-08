@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: frontend-service
 spec:
-  type: LoadBalancer # This will expose the service externally
+  type: ClusterIP # This will expose the service externally
   selector:
     app: oscar-yolo-client
   ports:
