@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: yolo-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      # If the path starts with /api, proxy it to the backend service.
+      # The path is NOT rewritten. It will be forwarded as-is.
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 5000
+      # If the path is anything else, send it to the frontend service.
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
