@@ -5,7 +5,7 @@ metadata:
   labels:
     app: yolo-ecommerce
 spec:
-  # The ingressClassName line has been removed to allow GKE's default controller to take over.
+  # Remove ingressClassName to allow GKE's default controller to take over.
   rules:
   - http:
       paths:
