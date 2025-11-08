@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-deployment
+  labels:
+    app: yolo-ecommerce
+    component: backend
 spec:
   replicas: 1
   selector:
@@ -11,10 +14,11 @@ spec:
     metadata:
       labels:
         app: oscar-yolo-backend
+        component: backend
     spec:
       containers:
       - name: backend
-        image: oscar066/oscar-yolo-backend:v1.1.1 # Image from Docker Hub
+        image: oscar066/oscar-yolo-backend:v1.1.1
         ports:
         - containerPort: 5000
         env:

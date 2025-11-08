@@ -2,6 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: backend-service
+  labels:
+    app: yolo-ecommerce
+    component: backend
+  annotations:
+    # Links the service to our BackendConfig
+    cloud.google.com/backend-config: '{"default": "backend-health-check"}'
 spec:
   type: ClusterIP
   selector:

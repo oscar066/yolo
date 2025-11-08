@@ -1,0 +1,13 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: backend-health-check
+  labels:
+    app: yolo-ecommerce
+    component: backend
+spec:
+  healthCheck:
+    # Get the health checker to send a GET request to this valid path
+    requestPath: /api/products
+    port: 5000
+    type: HTTP
